@@ -1,0 +1,46 @@
+<!-- ProductsListingt.html -->
+<table
+  mat-table
+  [dataSource]="dataSource"
+  #mytable
+  class="my-table mat-elevation-z8"
+>
+  <!-- Id Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID.</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <!-- title   Column -->
+  <ng-container matColumnDef="title  ">
+    <th mat-header-cell *matHeaderCellDef>title</th>
+    <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+  </ng-container>
+
+  <!-- price   Column -->
+  <ng-container matColumnDef="price  ">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+  </ng-container>
+
+  <!-- category   Column -->
+  <ng-container matColumnDef="category  ">
+    <th mat-header-cell *matHeaderCellDef>Category</th>
+    <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" class="action-link">
+      <a (click)="toNavigate()"
+        ><mat-icon aria-hidden="false" aria-label="Example visibility icon"
+          >visibility</mat-icon
+        >
+      </a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
