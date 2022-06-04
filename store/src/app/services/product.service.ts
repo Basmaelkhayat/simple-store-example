@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
@@ -16,12 +16,11 @@ export class ProductService {
       reportProgress: true,
       responseType: 'json',
     });
-
     return this.http.request(req);
   }
 
   getDataList(): Observable<any> {
-    return this.http.get(`${this.baseUrl}?limit=10`);
+    return this.http.get(`${this.baseUrl}`);
   }
 
   getOneProudect(): Observable<any> {

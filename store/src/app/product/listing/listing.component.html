@@ -1,46 +1,101 @@
 <!-- ProductsListingt.html -->
-<table
-  mat-table
-  [dataSource]="dataSource"
-  #mytable
-  class="my-table mat-elevation-z8"
->
-  <!-- Id Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID.</th>
-    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-  </ng-container>
+<div class="container h-full mx-auto p-4">
+  <button
+    mat-button
+    (click)="openDialog('Add', {})"
+    mat-flat-button
+    color="primary"
+  >
+    Add Row
+  </button>
+  <div
+    *ngIf="datasource.length == 0 && isLoading == false"
+    class="flex justify-center"
+  >
+    No data
+  </div>
+  <div
+    class="spinner-container flex justify-center items-center h-full"
+    *ngIf="isLoading == true"
+  >
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="datasource.length > 0">
+    <table
+      mat-table
+      [dataSource]="datasource"
+      class="my-table mat-elevation-z8 container"
+    >
+      <!-- index Column -->
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          {{ i + 1 }}
+        </td>
+      </ng-container>
 
-  <!-- title   Column -->
-  <ng-container matColumnDef="title  ">
-    <th mat-header-cell *matHeaderCellDef>title</th>
-    <td mat-cell *matCellDef="let element">{{ element.title }}</td>
-  </ng-container>
+      <!-- Image Column -->
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <td mat-cell *matCellDef="let element">
+          <img
+            src="{{ element.image }}"
+            alt="avatar"
+            class="h-12 w-12 m-4 rounded-full"
+          />
+        </td>
+      </ng-container>
 
-  <!-- price   Column -->
-  <ng-container matColumnDef="price  ">
-    <th mat-header-cell *matHeaderCellDef>Price</th>
-    <td mat-cell *matCellDef="let element">{{ element.price }}</td>
-  </ng-container>
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID.</th>
+        <td mat-cell *matCellDef="let element">code-{{ element.id }}</td>
+      </ng-container>
 
-  <!-- category   Column -->
-  <ng-container matColumnDef="category  ">
-    <th mat-header-cell *matHeaderCellDef>Category</th>
-    <td mat-cell *matCellDef="let element">{{ element.category }}</td>
-  </ng-container>
+      <!-- title   Column -->
+      <ng-container matColumnDef="title  ">
+        <th mat-header-cell *matHeaderCellDef>title</th>
+        <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+      </ng-container>
 
-  <!-- Action Column -->
-  <ng-container matColumnDef="action">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let element" class="action-link">
-      <a (click)="toNavigate()"
-        ><mat-icon aria-hidden="false" aria-label="Example visibility icon"
-          >visibility</mat-icon
+      <!-- price   Column -->
+      <ng-container matColumnDef="price  ">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+      </ng-container>
+
+      <!-- category   Column -->
+      <ng-container matColumnDef="category  ">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="action-link"
+          style="text-align: end"
         >
-      </a>
-    </td>
-  </ng-container>
+          <a (click)="openDialog('Update', element)">Edit</a> |
+          <a (click)="openDialog('Delete', element)">Delete</a>
+          <a (click)="toNavigate(element)" class="px-4">
+            <mat-icon aria-hidden="false" aria-label="Example visibility icon"
+              >visibility</mat-icon
+            >
+          </a>
+        </td>
+      </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+  <!-- app.component.html -->
+</div>

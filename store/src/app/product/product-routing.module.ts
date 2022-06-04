@@ -19,8 +19,11 @@ const routes: Routes = [
           import(`./listing/listing.module`).then((m) => m.ListingModule),
       },
       {
-        path: 'map',
-        loadChildren: () => import(`./map/map.module`).then((m) => m.MapModule),
+        path: 'prouduct-details',
+        loadChildren: () =>
+          import(`./productDetails/productDetails.module`).then(
+            (m) => m.ProductDetailsModule
+          ),
       },
       {
         path: '**',
