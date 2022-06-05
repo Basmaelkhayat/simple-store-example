@@ -1,0 +1,6 @@
+.mat-dialog-content {
+    display: grid;
+}
+.mat-dialog-actions {
+    justify-content: end;
+}

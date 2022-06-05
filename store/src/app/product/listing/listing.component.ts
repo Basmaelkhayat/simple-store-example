@@ -74,7 +74,7 @@ export class ListingComponent implements OnInit {
   openDialog(action: any, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(AddEditProduct, {
-      width: '250px',
+      width: '500px',
       data: obj,
     });
 
@@ -91,6 +91,10 @@ export class ListingComponent implements OnInit {
   d?: any = 20;
 
   addRowData(row_obj: any) {
+    // if we use const we will add ',newRow' after datasource object .
+    // but if we use push ..
+    // that mean datasource already have new data so we don't need to add it again.
+    this.isLoading = true;
     this.datasource.push({
       id: this.d + 1,
       title: row_obj.title,
@@ -100,8 +104,10 @@ export class ListingComponent implements OnInit {
       image: row_obj.image,
     });
     this.d++;
-    console.log(this.datasource);
-    this.table.renderRows();
+    setInterval(() => {
+      this.datasource = [...this.datasource];
+      this.isLoading = false;
+    }, 1000);
   }
   updateRowData(row_obj: any) {
     this.datasource = this.datasource.filter((value: any, key: any) => {
