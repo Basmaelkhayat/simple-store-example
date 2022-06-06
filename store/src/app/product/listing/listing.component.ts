@@ -26,10 +26,19 @@ export const ELEMENT_DATA: ProuductData[] = [];
 export class ListingComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
-
-  pageSize = 5;
-  currentPage = 0;
-  totalSize = 0;
+  displayedColumns: string[] = [
+    'image',
+    'id',
+    'title  ',
+    'price  ',
+    'category  ',
+    'action',
+  ];
+  datasource?: any = ELEMENT_DATA;
+  isLoading?: any = true;
+  pageSize?: any = 5;
+  currentPage?: any = 0;
+  totalSize?: any = 0;
   array: any;
   pageEvent: PageEvent | any;
 
@@ -39,30 +48,14 @@ export class ListingComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {}
-
-  displayedColumns: string[] = [
-    'index',
-    'image',
-    'id',
-    'title  ',
-    'price  ',
-    'category  ',
-    'action',
-  ];
-
-  datasource?: any = ELEMENT_DATA;
-
-  isLoading?: any = true;
-
   ngOnInit() {
     this.getAllData();
   }
-  public handlePage(e: any) {
+  handlePage(e: any) {
     this.currentPage = e.pageIndex;
     this.pageSize = e.pageSize;
     this.iterator();
   }
-
   getAllData() {
     this.productService.getDataList().subscribe(
       (data) => {
@@ -76,7 +69,7 @@ export class ListingComponent implements OnInit {
       (error) => (this.isLoading = false)
     );
   }
-  private iterator() {
+  iterator() {
     const end = (this.currentPage + 1) * this.pageSize;
     const start = this.currentPage * this.pageSize;
     const part = this.array.slice(start, end);
@@ -89,7 +82,6 @@ export class ListingComponent implements OnInit {
   ngAfterViewInit() {
     this.datasource.paginator = this.paginator;
   }
-
   openDialog(action: any, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(AddEditProduct, {
@@ -110,6 +102,7 @@ export class ListingComponent implements OnInit {
   d?: any = 20;
 
   addRowData(row_obj: any) {
+    // console.log(this.datasource.length);
     // if we use const we will add ',newRow' after datasource object .
     // but if we use push ..
     // that mean datasource already have new data so we don't need to add it again.
@@ -123,10 +116,11 @@ export class ListingComponent implements OnInit {
       image: row_obj.image,
     });
     this.d++;
-    setInterval(() => {
-      this.datasource = [...this.datasource];
-      this.isLoading = false;
-    }, 1000);
+    this.datasource = [...this.datasource];
+    this.productService
+      .addNew(this.datasource)
+      .subscribe((data) => (this.isLoading = false));
+    // this.getAllData();
   }
   updateRowData(row_obj: any) {
     this.datasource = this.datasource.filter((value: any, key: any) => {

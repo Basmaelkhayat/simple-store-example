@@ -1,5 +1,4 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -12,7 +11,6 @@ describe('ProductDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ProductDetailsComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [HttpClientTestingModule],
       providers: [ProductService],
     }).compileComponents();
