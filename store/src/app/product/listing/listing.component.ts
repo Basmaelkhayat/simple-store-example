@@ -1,14 +1,12 @@
 //app.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { AddEditProduct } from 'src/app/product/addEditProduct/addEditProduct.component';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 export interface ProuductData {
   title: string;
@@ -26,7 +24,14 @@ export const ELEMENT_DATA: ProuductData[] = [];
   styleUrls: ['./listing.component.css'],
 })
 export class ListingComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
+
+  pageSize = 5;
+  currentPage = 0;
+  totalSize = 0;
+  array: any;
+  pageEvent: PageEvent | any;
 
   constructor(
     public dialog: MatDialog,
@@ -52,21 +57,35 @@ export class ListingComponent implements OnInit {
   ngOnInit() {
     this.getAllData();
   }
+  public handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
   getAllData() {
     this.productService.getDataList().subscribe(
       (data) => {
         this.isLoading = false;
         this.datasource = data;
+        this.datasource.paginator = this.paginator;
+        this.array = data;
+        this.totalSize = this.array.length;
+        this.iterator();
       },
       (error) => (this.isLoading = false)
     );
+  }
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.array.slice(start, end);
+    this.datasource = part;
   }
   toNavigate(rowInfo: {}) {
     this.router.navigate(['prouduct-details'], { relativeTo: this.route });
     localStorage.setItem('row-info', JSON.stringify(rowInfo));
   }
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   ngAfterViewInit() {
     this.datasource.paginator = this.paginator;
   }
